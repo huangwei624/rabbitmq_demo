@@ -1,4 +1,4 @@
 package utils;
 
-public class A {
+public class AA {
 }

@@ -1,9 +1,13 @@
 package utils;
 
 public class AA {
+         // bb
          // aa
-         //         // bb
-         public void m2(){
+         public void m1(){
          	System.out.println("ccc");
          }
+	
+		public void m2(){
+			System.out.println("bbc");
+		}
 }

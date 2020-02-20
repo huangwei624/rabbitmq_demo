@@ -43,3 +43,30 @@ DefaultConsumer defaultConsumer = new DefaultConsumer(channel){
 channel.basicConsume(Constant.QUEUE_NAME, false, defaultConsumer);
 ```
 ### 二、订阅发布消息队列
+
+**1. fanout 类型交换机**
+- 默认将消息群发到绑定到这个交换机的所有消息队列
+
+**2. direct 类型交换机**
+- 加入了 路由键（routing key), 队列绑定交换机的时候，需要设置routing key
+当生产者发送消息给交换机的时候，也需要设置routing key，然后交换机根据
+这个routing key 转发给具有相同的routing key的消息队列
+```
+// 队列绑定交换机，并设置 routing key
+channel.queueBind(EMAIL_QUEUE_NAME, EXCHANGE_NAME, "email");  
+
+// 生产者发送消息，并设置 routing key
+channel.basicPublish(EXCHANGE_NAME, "email", false, null, msg.getBytes());
+```
+
+**3. topic 类型交换机**
+- topic 与 direct 类型的不同主要是topic类型支持了通配符 的 routing key （#， *） 这两种通配符
+- \# ：可以匹配多个单词； \* ：只能匹配一个单词，例如：`log.email.sms `和 `*.email.sms` 匹配
+    `log.email.sms` 和 `#.sms` 匹配
+```
+// 队列绑定交换机，并设置 routing key
+channel.queueBind(EMAIL_QUEUE_NAME, EXCHANGE_NAME, "*.email");  
+
+// 生产者发送消息，并设置 routing key
+channel.basicPublish(EXCHANGE_NAME, "log.email", false, null, msg.getBytes());
+```
